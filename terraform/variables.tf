@@ -29,3 +29,18 @@ variable "sqs_service_image" {
   description = "Container image for flask-sqs-service"
   default     = "public.ecr.aws/docker/library/python:3.11-slim"
 }
+
+variable "github_org" {
+  type        = string
+  description = "GitHub org/user name"
+}
+
+variable "github_repo_iac" {
+  type        = string
+  description = "IaC repo name (without org)"
+}
+
+variable "github_repo_apps" {
+  type        = string
+  description = "Apps repo name (without org)"
+}

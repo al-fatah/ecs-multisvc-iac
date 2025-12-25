@@ -29,3 +29,7 @@ output "ecs_service_s3_name" {
 output "ecs_service_sqs_name" {
   value = aws_ecs_service.sqs.name
 }
+
+output "github_actions_role_arn" {
+  value = aws_iam_role.gha_iac.arn
+}

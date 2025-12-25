@@ -1,0 +1,39 @@
+# =====================
+# Terraform (CRITICAL)
+# =====================
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+*.plan
+*.out
+crash.log
+.crash.log
+
+# Lock file (optional to commit; ignored for portfolio simplicity)
+.terraform.lock.hcl
+
+# =====================
+# Terraform overrides
+# =====================
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# =====================
+# Environment / secrets
+# =====================
+.env
+.env.*
+aws.env
+
+# =====================
+# CLI / OS / Editor
+# =====================
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
