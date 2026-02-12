@@ -1,136 +1,154 @@
-# ECS Multi-Service Infrastructure (IaC)
+# 🚀 ECS Multi-Service Infrastructure (Terraform + OIDC)
 
-This repository provisions the **AWS infrastructure** for a portfolio project deploying **two containerized microservices** on **ECS Fargate**, fronted by an **Application Load Balancer (ALB)**.
+Production-style Infrastructure as Code (IaC) project deploying two
+containerized microservices on Amazon ECS Fargate, fronted by an
+Application Load Balancer (ALB).
 
-The infrastructure is managed using **Terraform** and deployed via **GitHub Actions with OIDC** (no static AWS credentials).
+Infrastructure is fully managed using Terraform and deployed securely
+via GitHub Actions with OIDC --- no static AWS credentials.
 
----
+------------------------------------------------------------------------
 
-## Architecture Overview
+# 🏗 Architecture Overview
 
-Internet  
-→ Application Load Balancer (ALB)  
-→ `/s3/*` → ECS Service (Flask S3 Service) → S3 Bucket  
-→ `/sqs/*` → ECS Service (Flask SQS Service) → SQS Queue  
+Internet ↓ Application Load Balancer (ALB) ├── /s3/\* → ECS Service
+(Flask S3 Service) → Amazon S3 └── /sqs/\* → ECS Service (Flask SQS
+Service) → Amazon SQS
 
-Supporting services:
-- Amazon ECR (2 repositories)
-- Amazon CloudWatch Logs
-- IAM (Execution Role + Task Role)
-- Custom VPC with public subnets + Internet Gateway
+Supporting Services: - Amazon ECR (2 repositories) - Amazon CloudWatch
+Logs - IAM (Execution Role + Task Role) - Custom VPC (public subnets +
+Internet Gateway)
 
----
+------------------------------------------------------------------------
 
-## What This Repo Provisions
+# 📦 What This Repository Provisions
 
-### Networking
-- Custom VPC
-- 2 public subnets (multi-AZ)
-- Internet Gateway
-- Route tables
+## 🌐 Networking
 
-### Compute
-- ECS Cluster (Fargate)
-- 2 ECS Services:
-  - Flask → S3 uploader
-  - Flask → SQS message producer
+-   Custom VPC
+-   2 Public Subnets (Multi-AZ)
+-   Internet Gateway
+-   Route Tables
+-   Security Groups
 
-### Load Balancing
-- Application Load Balancer
-- Path-based routing:
-  - `/s3/*`
-  - `/sqs/*`
+## ⚙️ Compute
 
-### Storage & Messaging
-- S3 bucket (file uploads)
-- SQS queue (message ingestion)
+-   ECS Cluster (Fargate)
+-   2 ECS Services:
+    -   Flask → S3 file uploader
+    -   Flask → SQS message producer
 
-### Container Registry
-- 2 ECR repositories (one per service)
+## 🔀 Load Balancing
 
-### Observability
-- CloudWatch Log Groups (per service)
+-   Application Load Balancer
+-   Path-based routing:
+    -   /s3/\*
+    -   /sqs/\*
+-   Target Groups (per service)
 
-### Security & IAM
-- ECS Task Execution Role
-- ECS Task Role (least privilege)
-- GitHub Actions OIDC IAM Role (Terraform + App deploy)
+## 🗂 Storage & Messaging
 
----
+-   S3 Bucket (file uploads)
+-   SQS Queue (message ingestion)
 
-## Repository Structure
+## 📦 Container Registry
 
-ecs-multisvc-iac/
-├── terraform/
-│   ├── main.tf
-│   ├── variables.tf
-│   ├── outputs.tf
-│   ├── versions.tf
-│   └── github-oidc.tf
-├── .github/
-│   └── workflows/
-│       ├── terraform-ci.yml
-│       └── terraform-deploy.yml
-└── README.md
+-   2 Amazon ECR repositories (one per service)
 
----
+## 📊 Observability
 
-## Terraform Workflows
+-   CloudWatch Log Groups (per service)
+-   Structured container logging
 
-### CI (Pull Requests)
-Triggered on PRs to `main`:
-- `terraform fmt -check`
-- `terraform validate`
+## 🔐 Security & IAM
 
-### CD (Manual)
-Triggered via **GitHub Actions → “Terraform Deploy”**:
-- Uses **OIDC** to assume an AWS IAM role
-- Runs `terraform apply`
-- No AWS access keys stored in GitHub
+-   ECS Task Execution Role
+-   ECS Task Role (least privilege)
+-   GitHub Actions OIDC IAM Role (Terraform + deployment)
 
----
+------------------------------------------------------------------------
 
-## How to Deploy
+# 📁 Repository Structure
 
-From the terraform directory:
+ecs-multisvc-iac/ ├── terraform/ │ ├── main.tf │ ├── variables.tf │ ├──
+outputs.tf │ ├── versions.tf │ └── github-oidc.tf ├── .github/ │ └──
+workflows/ │ ├── terraform-ci.yml │ └── terraform-deploy.yml └──
+README.md
 
-terraform init  
-terraform plan  
-terraform apply  
+------------------------------------------------------------------------
 
-Or via GitHub Actions:
-1. Open Actions
-2. Select Terraform Deploy
-3. Run workflow
+# 🔄 CI/CD Workflows
 
----
+## ✅ Continuous Integration (Pull Requests)
 
-## Security Design
+Triggered on PRs to main: - terraform fmt -check - terraform validate
 
-- GitHub Actions authenticates via OIDC
-- No static AWS credentials
-- Task roles follow least-privilege
-  - S3: PutObject only
-  - SQS: SendMessage only
+## 🚀 Continuous Deployment (Manual Trigger)
 
----
+GitHub → Actions → Terraform Deploy
 
-## Cost & Cleanup
+Workflow: - Uses OIDC to assume AWS IAM role - Runs terraform init -
+Runs terraform apply - No AWS access keys stored in GitHub
+
+------------------------------------------------------------------------
+
+# 🛠 Local Deployment
+
+From the terraform/ directory:
+
+terraform init terraform plan terraform apply
+
+Destroy infrastructure:
 
 terraform destroy
 
-(Optional: remove ECR images and empty S3 bucket first)
+Note: If destroy fails, empty the S3 bucket and remove ECR images first.
 
----
+------------------------------------------------------------------------
 
-## Status
+# 🔒 Security Design
 
-- Phase 2: Infrastructure provisioning ✅
-- Phase 4: CI/CD with GitHub Actions + OIDC ✅
-- Phase 5: Portfolio documentation ✅
+-   OIDC authentication (no static credentials)
+-   Least-privilege IAM policies
+    -   S3 service → s3:PutObject only
+    -   SQS service → sqs:SendMessage only
+-   Isolated VPC networking
+-   ALB path-based exposure control
 
----
+------------------------------------------------------------------------
 
-### One-line summary
+# 💰 Cost Considerations
 
-Terraform-managed AWS infrastructure deploying two ECS Fargate services behind an ALB, secured with GitHub Actions OIDC and least-privilege IAM.
+Primary cost drivers: - ECS Fargate compute - ALB hourly charges -
+CloudWatch logs
+
+Designed for demo/portfolio scale.
+
+------------------------------------------------------------------------
+
+# 📌 Project Status
+
+-   Phase 1: Architecture design ✅
+-   Phase 2: Infrastructure provisioning ✅
+-   Phase 3: Microservices deployment ✅
+-   Phase 4: CI/CD with GitHub Actions + OIDC ✅
+-   Phase 5: Documentation complete ✅
+
+------------------------------------------------------------------------
+
+# 🧠 DevOps Concepts Demonstrated
+
+-   Infrastructure as Code (Terraform)
+-   Container orchestration (ECS Fargate)
+-   Path-based routing
+-   Secure CI/CD using OIDC
+-   IAM least privilege design
+-   Multi-service architecture
+
+------------------------------------------------------------------------
+
+# 📝 One-Line Summary
+
+Terraform-managed AWS infrastructure deploying two ECS Fargate
+microservices behind an ALB, secured with GitHub Actions OIDC and
+least-privilege IAM.
