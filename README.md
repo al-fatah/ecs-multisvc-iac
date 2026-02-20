@@ -1,4 +1,4 @@
-# 🚀 ECS Multi-Service Infrastructure (Terraform + OIDC)
+# ECS Multi-Service Infrastructure (Terraform + OIDC)
 
 Production-style Infrastructure as Code (IaC) project deploying two
 containerized microservices on Amazon ECS Fargate, fronted by an
@@ -9,7 +9,7 @@ via GitHub Actions with OIDC --- no static AWS credentials.
 
 ------------------------------------------------------------------------
 
-# 🏗 Architecture Overview
+# Architecture Overview
 
 Internet ↓ Application Load Balancer (ALB) ├── /s3/\* → ECS Service
 (Flask S3 Service) → Amazon S3 └── /sqs/\* → ECS Service (Flask SQS
@@ -21,9 +21,9 @@ Internet Gateway)
 
 ------------------------------------------------------------------------
 
-# 📦 What This Repository Provisions
+# What This Repository Provisions
 
-## 🌐 Networking
+## Networking
 
 -   Custom VPC
 -   2 Public Subnets (Multi-AZ)
@@ -31,14 +31,14 @@ Internet Gateway)
 -   Route Tables
 -   Security Groups
 
-## ⚙️ Compute
+## Compute
 
 -   ECS Cluster (Fargate)
 -   2 ECS Services:
     -   Flask → S3 file uploader
     -   Flask → SQS message producer
 
-## 🔀 Load Balancing
+## Load Balancing
 
 -   Application Load Balancer
 -   Path-based routing:
@@ -46,21 +46,21 @@ Internet Gateway)
     -   /sqs/\*
 -   Target Groups (per service)
 
-## 🗂 Storage & Messaging
+## Storage & Messaging
 
 -   S3 Bucket (file uploads)
 -   SQS Queue (message ingestion)
 
-## 📦 Container Registry
+## Container Registry
 
 -   2 Amazon ECR repositories (one per service)
 
-## 📊 Observability
+## Observability
 
 -   CloudWatch Log Groups (per service)
 -   Structured container logging
 
-## 🔐 Security & IAM
+## Security & IAM
 
 -   ECS Task Execution Role
 -   ECS Task Role (least privilege)
@@ -68,22 +68,13 @@ Internet Gateway)
 
 ------------------------------------------------------------------------
 
-# 📁 Repository Structure
+# CI/CD Workflows
 
-ecs-multisvc-iac/ ├── terraform/ │ ├── main.tf │ ├── variables.tf │ ├──
-outputs.tf │ ├── versions.tf │ └── github-oidc.tf ├── .github/ │ └──
-workflows/ │ ├── terraform-ci.yml │ └── terraform-deploy.yml └──
-README.md
-
-------------------------------------------------------------------------
-
-# 🔄 CI/CD Workflows
-
-## ✅ Continuous Integration (Pull Requests)
+## Continuous Integration (Pull Requests)
 
 Triggered on PRs to main: - terraform fmt -check - terraform validate
 
-## 🚀 Continuous Deployment (Manual Trigger)
+## Continuous Deployment (Manual Trigger)
 
 GitHub → Actions → Terraform Deploy
 
@@ -92,7 +83,7 @@ Runs terraform apply - No AWS access keys stored in GitHub
 
 ------------------------------------------------------------------------
 
-# 🛠 Local Deployment
+# Local Deployment
 
 From the terraform/ directory:
 
@@ -106,7 +97,7 @@ Note: If destroy fails, empty the S3 bucket and remove ECR images first.
 
 ------------------------------------------------------------------------
 
-# 🔒 Security Design
+# Security Design
 
 -   OIDC authentication (no static credentials)
 -   Least-privilege IAM policies
@@ -117,7 +108,7 @@ Note: If destroy fails, empty the S3 bucket and remove ECR images first.
 
 ------------------------------------------------------------------------
 
-# 💰 Cost Considerations
+# Cost Considerations
 
 Primary cost drivers: - ECS Fargate compute - ALB hourly charges -
 CloudWatch logs
@@ -126,7 +117,7 @@ Designed for demo/portfolio scale.
 
 ------------------------------------------------------------------------
 
-# 📌 Project Status
+# Project Status
 
 -   Phase 1: Architecture design ✅
 -   Phase 2: Infrastructure provisioning ✅
@@ -136,7 +127,7 @@ Designed for demo/portfolio scale.
 
 ------------------------------------------------------------------------
 
-# 🧠 DevOps Concepts Demonstrated
+# DevOps Concepts Demonstrated
 
 -   Infrastructure as Code (Terraform)
 -   Container orchestration (ECS Fargate)
@@ -146,9 +137,3 @@ Designed for demo/portfolio scale.
 -   Multi-service architecture
 
 ------------------------------------------------------------------------
-
-# 📝 One-Line Summary
-
-Terraform-managed AWS infrastructure deploying two ECS Fargate
-microservices behind an ALB, secured with GitHub Actions OIDC and
-least-privilege IAM.
