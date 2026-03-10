@@ -11,13 +11,24 @@ via GitHub Actions with OIDC --- no static AWS credentials.
 
 # Architecture Overview
 
-Internet ↓ Application Load Balancer (ALB) ├── /s3/\* → ECS Service
-(Flask S3 Service) → Amazon S3 └── /sqs/\* → ECS Service (Flask SQS
-Service) → Amazon SQS
+Internet
+   │
+   ▼
+Application Load Balancer (ALB)
+   │
+   ├── /s3/*  ──► ECS Service (Flask S3 Service)
+   │               │
+   │               └── Amazon S3
+   │
+   └── /sqs/* ──► ECS Service (Flask SQS Service)
+                   │
+                   └── Amazon SQS
 
-Supporting Services: - Amazon ECR (2 repositories) - Amazon CloudWatch
-Logs - IAM (Execution Role + Task Role) - Custom VPC (public subnets +
-Internet Gateway)
+Supporting Services: 
+- Amazon ECR (2 repositories)
+- Amazon CloudWatch Logs
+- IAM (Execution Role + Task Role)
+- Custom VPC (public subnets + Internet Gateway)
 
 ------------------------------------------------------------------------
 
