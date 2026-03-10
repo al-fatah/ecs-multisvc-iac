@@ -11,11 +11,7 @@ via GitHub Actions with OIDC --- no static AWS credentials.
 
 # Architecture Overview
 
-Internet
-   ↓
-Application Load Balancer (ALB)
-   ├── /s3/*  → ECS Service (Flask S3 Service)  → Amazon S3
-   └── /sqs/* → ECS Service (Flask SQS Service) → Amazon SQS
+<img width="2815" height="1075" alt="mermaid-diagram" src="https://github.com/user-attachments/assets/ba410e11-dc90-4191-9b44-a7672af80c09" />
 
 Supporting Services: 
 - Amazon ECR (2 repositories)
