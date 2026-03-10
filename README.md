@@ -12,17 +12,13 @@ via GitHub Actions with OIDC --- no static AWS credentials.
 # Architecture Overview
 
 Internet
-   │
-   ▼
+   |
+   v
 Application Load Balancer (ALB)
-   │
-   ├── /s3/*  ──► ECS Service (Flask S3 Service)
-   │               │
-   │               └── Amazon S3
-   │
-   └── /sqs/* ──► ECS Service (Flask SQS Service)
-                   │
-                   └── Amazon SQS
+   |
+   |-- /s3/*  ---> ECS Service (Flask S3 Service) ---> S3 Bucket
+   |
+   |-- /sqs/* ---> ECS Service (Flask SQS Service) ---> SQS Queue
 
 Supporting Services: 
 - Amazon ECR (2 repositories)
